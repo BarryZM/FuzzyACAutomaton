@@ -1,7 +1,9 @@
+#coding: utf-8
 import sys
 import os
 import numpy as np 
 from utils.utils import *
+
 class NounMatcher(object):
     def __init__(self,
                 name,
