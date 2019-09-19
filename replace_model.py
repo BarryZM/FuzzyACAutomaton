@@ -18,7 +18,7 @@ class NounMatcher(object):
             if i in stroke_dict:
                 self.char_same_stroke_lists.append(stroke_dict[i])
     
-    def match_and_replace(sentence):
+    def match_and_replace(self, sentence):
         length = len(self.char_same_pinyin_lists)
         for i in range(len(sentence) - length + 1):
             temp_str = sentence[i:i+length]
