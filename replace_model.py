@@ -10,13 +10,18 @@ class NounMatcher(object):
                 pinyin_dict,
                 stroke_dict):
         self.name = name
+        print "self.name:", self.name
         self.char_same_pinyin_lists = []
         self.char_same_stroke_lists = []
         for i in name:
             if i in pinyin_dict:
                 self.char_same_pinyin_lists.append(pinyin_dict[i])
+            else:
+                print i," not in pinyin_dict"
             if i in stroke_dict:
                 self.char_same_stroke_lists.append(stroke_dict[i])
+            else:
+                print i," not in stroke_dict"
     
     def match_and_replace(self, sentence):
         length = len(self.char_same_pinyin_lists)
@@ -44,7 +49,8 @@ class Replacer(object):
         self.same_pinyin_dict = load_same_pinyin(same_pinyin_path)
         self.same_stroke_dict = load_same_stroke(same_stroke_path)
         self.subject_noun = load_subject_noun(subject_path)
-        print self.subject_noun
+        for i in self.subject_noun:
+            print i.encode("utf-8")
         self.noun_matchers = []
         for i in self.subject_noun:
             self.noun_matchers.append(NounMatcher(i, self.same_pinyin_dict, self.same_stroke_dict))
