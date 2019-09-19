@@ -16,7 +16,22 @@ class NounMatcher(object):
             if i in stroke_dict:
                 self.char_same_stroke_lists.append(stroke_dict[i])
     
-    
+    def match_and_replace(sentence):
+        length = len(self.char_same_pinyin_lists)
+        for i in range(len(sentence) - length + 1):
+            temp_str = sentence[i:i+length]
+            match = True
+            for j in range(len(temp_str)):
+                if not (temp_str[j] in self.char_same_pinyin_lists or 
+                    temp_str[j] in  self.char_same_stroke_lists):
+                    match = False
+                    break
+            if match:
+                for j in range(len(self.name)):
+                    sentence[i + j] = self.name[j]
+        # return sentence
+
+
 class Replacer(object):
     def __init__(self,
                 same_pinyin_path,
@@ -25,3 +40,19 @@ class Replacer(object):
         self.same_pinyin_dict = load_same_pinyin(same_pinyin_path)
         self.same_stroke_dict = load_same_stroke(same_stroke_path)
         self.subject_noun = load_subject_noun(subject_path)
+        self.noun_matchers = []
+        for i in self.subject_noun:
+            self.noun_matchers.append(NounMatcher(i, self.same_pinyin_dict, self.same_stroke_dict))
+    
+    def match_and_replace(sentence):
+        for i in self.noun_matchers:
+            i.match_and_replace(sentence)
+        return sentence
+
+if __name__ == "__main__":
+    same_pinyin_path = './data/same_pinyin.txt'
+    same_stroke_path = './data/same_stroke.txt'
+    subject_path = './data/chem'
+    sentence = u'试验表示大量的二氧化炭震荡后不溶于溴水'
+    replacer = Replacer(same_pinyin_path, same_stroke_path, subject_path)
+    print replacer.match_and_replace(sentence)

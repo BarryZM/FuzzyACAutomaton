@@ -1,4 +1,5 @@
 import codecs
+import os
 
 def load_same_stroke(path, sep='\t'):
     """
