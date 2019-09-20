@@ -17,8 +17,8 @@ class NounMatcher(object):
             if i in pinyin_dict:
                 self.char_same_pinyin_lists.append(pinyin_dict[i])
                 print i, ' 的同音字：'
-                for i in pinyin_dict[i]:
-                    print i.encode("utf-8")
+                for char in pinyin_dict[i]:
+                    print char.encode("utf-8")
                 print ''
             else:
                 self.char_same_pinyin_lists.append(set(i))
@@ -26,8 +26,8 @@ class NounMatcher(object):
             if i in stroke_dict:
                 self.char_same_stroke_lists.append(stroke_dict[i])
                 print i, ' 的同形字：'
-                for i in stroke_dict[i]:
-                    print i.encode("utf-8")
+                for char in stroke_dict[i]:
+                    print char.encode("utf-8")
                 print ''
             else:
                 self.char_same_stroke_lists.append(set(i))
