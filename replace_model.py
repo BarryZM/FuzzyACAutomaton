@@ -18,11 +18,13 @@ class NounMatcher(object):
                 self.char_same_pinyin_lists.append(pinyin_dict[i])
                 print i, ' 的同音字：', pinyin_dict[i]
             else:
+                self.char_same_pinyin_lists.append(set(i))
                 print i," not in pinyin_dict"
             if i in stroke_dict:
                 self.char_same_stroke_lists.append(stroke_dict[i])
                 print i, ' 的同形字：', stroke_dict[i]
             else:
+                self.char_same_stroke_lists.append(set(i))
                 print i," not in stroke_dict"
     
     def match_and_replace(self, sentence):
