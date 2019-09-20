@@ -19,6 +19,8 @@ def load_same_stroke(path, sep='\t'):
             if line.startswith('#'):
                 continue
             parts = line.split(sep)
+            for i in parts:
+                i = i.encode("utf-8")
             if parts and len(parts) > 1:
                 for i, c in enumerate(parts):
                     result[c] = set(list(parts[:i] + parts[i + 1:]))
@@ -41,6 +43,8 @@ def load_same_pinyin(path, sep='\t'):
             if line.startswith('#'):
                 continue
             parts = line.split(sep)
+            for i in parts:
+                i = i.encode("utf-8")
             if parts and len(parts) > 2:
                 key_char = parts[0]
                 same_pron_same_tone = set(list(parts[1]))
