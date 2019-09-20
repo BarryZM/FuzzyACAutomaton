@@ -13,7 +13,7 @@ def load_same_stroke(path, sep='\t'):
     if not os.path.exists(path):
         # logger.warn("file not exists:" + path)
         return result
-    with open(path, 'r') as f:
+    with codecs.open(path, 'r', encoding='utf-8') as f:
         for line in f:
             line = line.strip()
             if line.startswith('#'):
@@ -35,7 +35,7 @@ def load_same_pinyin(path, sep='\t'):
     if not os.path.exists(path):
         # logger.warn("file not exists:" + path)
         return result
-    with open(path, 'r') as f:
+    with codecs.open(path, 'r', encoding='utf-8') as f:
         for line in f:
             line = line.strip()
             if line.startswith('#'):
@@ -56,7 +56,7 @@ def load_subject_noun(path):
         # logger.warn("file not exists:" + path)
         return result
     res = []
-    with open(path, 'r') as f:
+    with codecs.open(path, 'r', encoding='utf-8') as f:
         for line in f:
             line = line.strip()
             res.append(line)
