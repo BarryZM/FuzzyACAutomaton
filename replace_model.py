@@ -35,8 +35,9 @@ class NounMatcher(object):
             print 'temp_str:', temp_str
             match = True
             for j in range(len(temp_str)):
-                if not (temp_str[j] in self.char_same_pinyin_lists or 
-                    temp_str[j] in  self.char_same_stroke_lists):
+                if not (temp_str[j] in self.char_same_pinyin_lists[j] or 
+                    temp_str[j] in  self.char_same_stroke_lists[j]):
+                    print 'cannt find:', temp_str[j]
                     match = False
                     break
             if match:
