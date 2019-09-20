@@ -28,9 +28,11 @@ class NounMatcher(object):
                 # print i," not in stroke_dict"
     
     def match_and_replace(self, sentence):
+        # print 'sentence:', sentence
         length = len(self.char_same_pinyin_lists)
         for i in range(len(sentence) - length + 1):
             temp_str = sentence[i:i+length]
+            print 'temp_str:', temp_str
             match = True
             for j in range(len(temp_str)):
                 if not (temp_str[j] in self.char_same_pinyin_lists or 
