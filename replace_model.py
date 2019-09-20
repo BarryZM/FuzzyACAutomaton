@@ -73,6 +73,6 @@ if __name__ == "__main__":
     same_pinyin_path = './data/same_pinyin.txt'
     same_stroke_path = './data/same_stroke.txt'
     subject_path = './data/chem'
-    sentence = '试验表示大量的二氧化炭震荡后不溶于溴水'
+    sentence = u'试验表示大量的二氧化炭震荡后不溶于溴水'
     replacer = Replacer(same_pinyin_path, same_stroke_path, subject_path)
     print replacer.match_and_replace(sentence)
