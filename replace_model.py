@@ -16,13 +16,19 @@ class NounMatcher(object):
         for i in name:
             if i in pinyin_dict:
                 self.char_same_pinyin_lists.append(pinyin_dict[i])
-                print i, ' 的同音字：', pinyin_dict[i]
+                print i, ' 的同音字：'
+                for i in pinyin_dict[i]:
+                    print i.encode("utf-8")
+                print ''
             else:
                 self.char_same_pinyin_lists.append(set(i))
                 print i," not in pinyin_dict"
             if i in stroke_dict:
                 self.char_same_stroke_lists.append(stroke_dict[i])
-                print i, ' 的同形字：', stroke_dict[i]
+                print i, ' 的同形字：'
+                for i in stroke_dict[i]:
+                    print i.encode("utf-8")
+                print ''
             else:
                 self.char_same_stroke_lists.append(set(i))
                 print i," not in stroke_dict"
