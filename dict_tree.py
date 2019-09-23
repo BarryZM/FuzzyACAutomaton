@@ -58,7 +58,7 @@ class DictTree(object):
             ancestor_fail_point = father.fail_point
             for child in father.childs:
                 while ancestor_fail_point:
-                    node = self.findCharInNodes(ancestor_fail_point.childs, temp_child.char)
+                    node = self.findCharInNodes(ancestor_fail_point.childs, child.char)
                     if node:
                         child.fail_point = node
                         break
