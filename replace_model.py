@@ -51,6 +51,7 @@ class NounMatcher(object):
                     match = False
                     break
             if match:
+                print sentence, self.name
                 for j in range(len(self.name)):
                     sentence[i + j] = self.name[j]
             if match:
