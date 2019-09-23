@@ -8,9 +8,11 @@ id = 0
 class TreeNode(object):
     def __init__(self,
                 char,
+                chars,
                 pinyin_dict,
                 stroke_dict):
         self.char = char
+        self.chars = chars
         self.candidates = [char]
         self.childs = []
         self.is_leaf = False
@@ -82,18 +84,36 @@ class DictTree(object):
     def buildDict(self):
         for temp_str in self.str_list:
             temp_nodes = self.roots
-            for char in temp_str:
+            for index, char in enumerate(temp_str):
                 node = self.findCharInNodes(temp_nodes, char)
                 if node:
                     temp_nodes = node.childs
                 else:
-                    node = TreeNode(char, self.pinyin_dict, self.stroke_dict)
+                    node = TreeNode(char, temp_str[0:index+1], self.pinyin_dict, self.stroke_dict)
                     temp_nodes.append(node)
                     temp_nodes = node.childs
             node.is_leaf = True
         self.buildFailPoint()
         
-    
+    def match(self, sentence):
+        p = None
+        temp_nodes = self.roots
+        for index, char in enumerate(sentence):
+            node = self.findCharInNodes(temp_nodes, char)
+            while node == None and p != None: # p != None表示p不为根节点，此时的None表示根节点
+                p = p.fail_point
+                temp_nodes = p.childs
+                node = self.findCharInNodes(temp_nodes, char)
+            if p:
+                temp = p 
+                while temp != None:
+                    temp = temp.fail_point
+                    print "index:", index, "   match:", p.chars
+        
+        
+            
+                
+
     def printInfo(self):
         for root in self.roots:
             root.printInfo()
@@ -102,10 +122,11 @@ class DictTree(object):
 if __name__ == "__main__":
     same_pinyin_path = './data/same_pinyin.txt'
     same_stroke_path = './data/same_stroke.txt'
-    subject_path = './data/dict_tree_test_data'
+    subject_path = './data/dict_tree_test_data1'
     pinyin_dict = load_same_pinyin(same_pinyin_path)
     stroke_dict = load_same_stroke(same_stroke_path)
     subject_noun = load_subject_noun(subject_path)
     dict_tree = DictTree(pinyin_dict, stroke_dict, subject_noun)
     dict_tree.printInfo()
+    dict_tree.match(u'羊绵公山羊肉山公')
                 
