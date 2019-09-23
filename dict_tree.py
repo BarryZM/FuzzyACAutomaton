@@ -16,6 +16,7 @@ class TreeNode(object):
         self.is_leaf = False
         self.fail_point = None
         self.id = id
+        global id
         id += 1
         if char in pinyin_dict:
             self.candidates += list(pinyin_dict[char])
