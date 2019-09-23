@@ -15,6 +15,8 @@ class NounMatcher(object):
         self.char_same_stroke_lists = []
         for i in name:
             if i in pinyin_dict:
+                if i not in pinyin_dict[i]:
+                    pinyin_dict[i].add(i)
                 self.char_same_pinyin_lists.append(pinyin_dict[i])
                 print i, ' 的同音字：'
                 for char in pinyin_dict[i]:
@@ -24,6 +26,8 @@ class NounMatcher(object):
                 self.char_same_pinyin_lists.append(set(i))
                 print i," not in pinyin_dict"
             if i in stroke_dict:
+                if i not in stroke_dict[i]:
+                    stroke_dict[i].add(i)
                 self.char_same_stroke_lists.append(stroke_dict[i])
                 print i, ' 的同形字：'
                 for char in stroke_dict[i]:
