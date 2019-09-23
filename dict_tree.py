@@ -106,8 +106,10 @@ class DictTree(object):
                 p = p.fail_point
                 temp_nodes = p.childs
                 node = self.findCharInNodes(temp_nodes, char)
+            if node != None:
+                p = node
             if p:
-                temp = copy.copy(p) 
+                temp = p  
                 while temp != None:
                     temp = temp.fail_point
                     print "index:", index, "   match:", p.chars
