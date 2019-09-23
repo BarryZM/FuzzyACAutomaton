@@ -77,7 +77,6 @@ class Replacer(object):
         self.noun_matchers = []
         for i in self.subject_noun:
             self.noun_matchers.append(NounMatcher(i, self.same_pinyin_dict, self.same_stroke_dict))
-            break
         # print len(self.noun_matchers)
 
     def match_and_replace(self, sentence):
