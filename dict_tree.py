@@ -62,7 +62,7 @@ class DictTree(object):
         for root in self.roots:
             root.printInfo()
     
-    def match(self, str)
+    # def roughMatch(self, str)
 if __name__ == "__main__":
     same_pinyin_path = './data/same_pinyin.txt'
     same_stroke_path = './data/same_stroke.txt'
