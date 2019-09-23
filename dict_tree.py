@@ -109,7 +109,7 @@ class DictTree(object):
             if node != None:
                 p = node
             if p:
-                temp = p  
+                temp = copy.copy(p)  
                 while temp != None:
                     temp = temp.fail_point
                     print "index:", index, "   match:", p.chars
