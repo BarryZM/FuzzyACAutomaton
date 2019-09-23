@@ -26,7 +26,7 @@ class TreeNode(object):
     
     def printInfo(self):
         print "char:", self.char, \
-            "fail_point:", self.fail_point \
+            "fail_point:", self.fail_point, \
             "is_leaf:", self.is_leaf, \
             "candidates:", self.candidates
         for child in  self.childs:
