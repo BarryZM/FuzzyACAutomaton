@@ -24,6 +24,7 @@ class TreeNode(object):
             self.candidates += list(pinyin_dict[char])
         if char in stroke_dict:
             self.candidates += list(stroke_dict[char])
+    
     def match(self,char):
         if char in candidates:
             return True
@@ -80,7 +81,6 @@ class DictTree(object):
                     child.fail_point = self.findCharInNodes(self.roots, child.char)
                 vect.append(child)
         
-
     def buildDict(self):
         for temp_str in self.str_list:
             temp_nodes = self.roots
@@ -100,6 +100,7 @@ class DictTree(object):
         temp_nodes = self.roots
         for index, char in enumerate(sentence):
             node = self.findCharInNodes(temp_nodes, char)
+            print index, char.encode('utf-8'), Node == None
             while node == None and p != None: # p != None表示p不为根节点，此时的None表示根节点
                 p = p.fail_point
                 temp_nodes = p.childs
@@ -109,16 +110,13 @@ class DictTree(object):
                 while temp != None:
                     temp = temp.fail_point
                     print "index:", index, "   match:", p.chars
-        
-        
-            
-                
 
     def printInfo(self):
         for root in self.roots:
             root.printInfo()
     
     # def roughMatch(self, str)
+
 if __name__ == "__main__":
     same_pinyin_path = './data/same_pinyin.txt'
     same_stroke_path = './data/same_stroke.txt'
