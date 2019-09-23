@@ -100,7 +100,7 @@ class DictTree(object):
         temp_nodes = self.roots
         for index, char in enumerate(sentence):
             node = self.findCharInNodes(temp_nodes, char)
-            print index, char.encode('utf-8'), Node == None
+            print index, char.encode('utf-8'), node == None
             while node == None and p != None: # p != None表示p不为根节点，此时的None表示根节点
                 p = p.fail_point
                 temp_nodes = p.childs
