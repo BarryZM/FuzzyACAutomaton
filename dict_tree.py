@@ -2,6 +2,7 @@
 import sys
 import os
 import numpy as np 
+import copy
 from utils.utils import *
 
 id = 0
@@ -106,7 +107,7 @@ class DictTree(object):
                 temp_nodes = p.childs
                 node = self.findCharInNodes(temp_nodes, char)
             if p:
-                temp = p 
+                temp = copy.copy(p) 
                 while temp != None:
                     temp = temp.fail_point
                     print "index:", index, "   match:", p.chars
