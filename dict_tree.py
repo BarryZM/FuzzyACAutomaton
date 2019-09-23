@@ -25,7 +25,7 @@ class TreeNode(object):
     def printInfo(self):
         print "char:", self.char, "candidates:", self.candidates
         for child in  self.childs:
-            child.printInfo
+            child.printInfo()
     
 class DictTree(object):
     def __init__(self,
@@ -58,7 +58,7 @@ class DictTree(object):
     
     def printInfo(self):
         for root in self.roots:
-            root.printInfo
+            root.printInfo()
     
 if __name__ == "__main__":
     same_pinyin_path = './data/same_pinyin.txt'
