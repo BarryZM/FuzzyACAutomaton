@@ -29,9 +29,14 @@ class TreeNode(object):
             return False
     
     def printInfo(self):
+        char = None
+        id = None
+        if self.fail_point:
+            char = self.fail_point.char
+            id = self.fail_point.id
         print "char:", self.char, \
-            "fail_point:", self.fail_point.char, \
-            "fail_point_id:", self.fail_point.id, \
+            "fail_point:", char, \
+            "fail_point_id:", id, \
             "is_leaf:", self.is_leaf, \
             "candidates:", self.candidates
         for child in  self.childs:
