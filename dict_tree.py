@@ -50,7 +50,7 @@ class DictTree(object):
             for char in temp_str:
                 node = self.findCharInNodes(temp_nodes, char)
                 if node:
-                    temp_nodes = node
+                    temp_nodes = node.childs
                 else:
                     node = TreeNode(char, self.pinyin_dict, self.stroke_dict)
                     temp_nodes.append(node)
