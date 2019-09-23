@@ -54,12 +54,12 @@ class NounMatcher(object):
                 print sentence, self.name
                 new_sentence = sentence[:i] + self.name + sentence[i+len(self.name):]
                 print new_sentence
-                return new_sentence
+                sentence = new_sentence
                 # for j in range(len(self.name)):
                 #     sentence[i + j] = self.name[j]
             if match:
                 print 'match:', temp_str
-            return sentence
+        return sentence
         # return sentence
 
 
@@ -77,7 +77,7 @@ class Replacer(object):
         self.noun_matchers = []
         for i in self.subject_noun:
             self.noun_matchers.append(NounMatcher(i, self.same_pinyin_dict, self.same_stroke_dict))
-            break
+            # break
         # print len(self.noun_matchers)
 
     def match_and_replace(self, sentence):
