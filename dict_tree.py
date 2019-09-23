@@ -58,16 +58,16 @@ class DictTree(object):
             ancestor_fail_point = father.fail_point
             for child in father.childs:
                 while ancestor_fail_point:
-                    for temp_child in ancestor_fail_point:
-                        if temp_child.char == child.char:
-                            child.fail_point = temp_child
-                            break
-                    ancestor_fail_point = ancestor_fail_point.fail_point
+                    node = self.findCharInNodes(ancestor_fail_point.childs, temp_child.char)
+                    if node:
+                        child.fail_point = node
+                        break
+                    else:
+                        ancestor_fail_point = ancestor_fail_point.fail_point
                 if ancestor_fail_point == None:
-                    child.fail_point = None
+                    child.fail_point = self.findCharInNodes(self.roots, child.char)
                 vect.append(child)
         
-
 
     def buildDict(self):
         for temp_str in self.str_list:
