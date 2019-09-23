@@ -13,6 +13,7 @@ class TreeNode(object):
         self.candidates = [char]
         self.childs = []
         self.is_leaf = False
+        self.fail_point = None
         if char in pinyin_dict:
             self.candidates += list(pinyin_dict[char])
         if char in stroke_dict:
@@ -24,7 +25,10 @@ class TreeNode(object):
             return False
     
     def printInfo(self):
-        print "char:", self.char, "is_leaf:", self.is_leaf, "candidates:", self.candidates
+        print "char:", self.char, \
+            "fail_point:", self.fail_point \
+            "is_leaf:", self.is_leaf, \
+            "candidates:", self.candidates
         for child in  self.childs:
             child.printInfo()
     
@@ -45,6 +49,26 @@ class DictTree(object):
                 return node
         return None
 
+    def buildFailPoint(self):
+        vect = []
+        for node in self.roots:
+            vect.append(node)
+        while vect:
+            father = vect.pop(0)
+            ancestor_fail_point = father.fail_point
+            for child in father.childs:
+                while ancestor_fail_point:
+                    for temp_child in ancestor_fail_point:
+                        if temp_child.char == child.char:
+                            child.fail_point = temp_child
+                            break
+                    ancestor_fail_point = ancestor_fail_point.fail_point
+                if ancestor_fail_point == None:
+                    child.fail_point = None
+                vect.append(child)
+        
+
+
     def buildDict(self):
         for temp_str in self.str_list:
             temp_nodes = self.roots
@@ -57,6 +81,8 @@ class DictTree(object):
                     temp_nodes.append(node)
                     temp_nodes = node.childs
             node.is_leaf = True
+        self.buildFailPoint()
+        
     
     def printInfo(self):
         for root in self.roots:
