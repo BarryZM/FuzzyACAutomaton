@@ -12,6 +12,7 @@ class TreeNode(object):
         self.char = char
         self.candidates = [char]
         self.childs = []
+        self.is_leaf = False
         if char in pinyin_dict:
             self.candidates += list(pinyin_dict[char])
         if char in stroke_dict:
@@ -23,7 +24,7 @@ class TreeNode(object):
             return False
     
     def printInfo(self):
-        print "char:", self.char, "candidates:", self.candidates
+        print "char:", self.char, "is_leaf:", self.is_leaf, "candidates:", self.candidates
         for child in  self.childs:
             child.printInfo()
     
@@ -55,11 +56,13 @@ class DictTree(object):
                     node = TreeNode(char, self.pinyin_dict, self.stroke_dict)
                     temp_nodes.append(node)
                     temp_nodes = node.childs
+            node.is_leaf = True
     
     def printInfo(self):
         for root in self.roots:
             root.printInfo()
     
+    def match(self, str)
 if __name__ == "__main__":
     same_pinyin_path = './data/same_pinyin.txt'
     same_stroke_path = './data/same_stroke.txt'
