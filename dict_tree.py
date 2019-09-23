@@ -4,6 +4,7 @@ import os
 import numpy as np 
 from utils.utils import *
 
+id = 0
 class TreeNode(object):
     def __init__(self,
                 char,
@@ -14,6 +15,8 @@ class TreeNode(object):
         self.childs = []
         self.is_leaf = False
         self.fail_point = None
+        self.id = id
+        id += 1
         if char in pinyin_dict:
             self.candidates += list(pinyin_dict[char])
         if char in stroke_dict:
@@ -26,7 +29,8 @@ class TreeNode(object):
     
     def printInfo(self):
         print "char:", self.char, \
-            "fail_point:", self.fail_point, \
+            "fail_point:", self.fail_point.char, \
+            "fail_point_id:", self.fail_point.id, \
             "is_leaf:", self.is_leaf, \
             "candidates:", self.candidates
         for child in  self.childs:
