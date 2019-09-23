@@ -52,10 +52,14 @@ class NounMatcher(object):
                     break
             if match:
                 print sentence, self.name
-                for j in range(len(self.name)):
-                    sentence[i + j] = self.name[j]
+                new_sentence = sentence[:i] + self.name + sentence[i+len(self.name):]
+                print new_sentence
+                return new_sentence
+                # for j in range(len(self.name)):
+                #     sentence[i + j] = self.name[j]
             if match:
                 print 'match:', temp_str
+            return sentence
         # return sentence
 
 
@@ -78,7 +82,7 @@ class Replacer(object):
 
     def match_and_replace(self, sentence):
         for i in self.noun_matchers:
-            i.match_and_replace(sentence)
+            sentence = i.match_and_replace(sentence)
         return sentence
 
 if __name__ == "__main__":
