@@ -63,6 +63,12 @@ class DictTree(object):
                 return node
         return None
 
+    def matchCharInNodes(self, temp_nodes, char):
+        for node in temp_nodes:
+            if node.match(char):
+                return node
+        return None
+
     def buildFailPoint(self):
         vect = []
         for node in self.roots:
@@ -101,13 +107,13 @@ class DictTree(object):
         temp_nodes = self.roots
         for index, char in enumerate(sentence):
             while True:
-                node = self.findCharInNodes(temp_nodes, char)
+                node = self.matchCharInNodes(temp_nodes, char)
                 print index, char.encode('utf-8'), node == None
-                if node == None and p != None:# p != None表示p不为根节点，此时的None表示根节点
+                if node == None and p != None: # p != None表示p不为根节点，此时的None表示根节点
                     p = p.fail_point
                     if p == None:
                         break
-                    temp_nodes = p.childs  ############和上一行顺序有问题
+                    temp_nodes = p.childs  # 需要判断p不为None
                 else:
                     break
             if node != None:
