@@ -205,9 +205,10 @@ class DictTree(object):
                     temp_nodes = []
                     new_fail_points = set()
                     for fail_point in fail_points:
-                        if fail_point == None and (not fail_points_exist_none):
-                            temp_nodes += self.roots
-                            fail_points_exist_none = True
+                        if fail_point == None:
+                            if not fail_points_exist_none:
+                                temp_nodes += self.roots
+                                fail_points_exist_none = True
                         else:
                             temp_nodes += fail_point.childs
                             new_fail_points.add(fail_point.fail_point)
