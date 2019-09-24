@@ -42,7 +42,7 @@ class TreeNode(object):
             "fail_point:", char, \
             "fail_point_id:", id, \
             "is_leaf:", self.is_leaf, \
-            "candidates:", [i.decode('unicode_escape') for i in self.candidates]
+            "candidates:", self.candidates
         for child in  self.childs:
             child.printInfo()
     
@@ -129,7 +129,7 @@ class DictTree(object):
             if p:
                 temp = copy.copy(p)  
                 while temp != None:
-                    if temp.is_leaf:
+                    if temp.is_leaf or True:
                         print "index:", index, "   match:", temp.chars
                     temp = temp.fail_point
 
