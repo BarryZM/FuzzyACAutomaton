@@ -38,11 +38,14 @@ class TreeNode(object):
         if self.fail_point:
             char = self.fail_point.char
             id = self.fail_point.id
+        str_
+        for char in self.candidates:
+            str_ += char
         print "char:", self.char, \
             "fail_point:", char, \
             "fail_point_id:", id, \
             "is_leaf:", self.is_leaf, \
-            "candidates:", self.candidates
+            "candidates:", str_
         for child in  self.childs:
             child.printInfo()
     
@@ -120,7 +123,7 @@ class DictTree(object):
                 if index == 8:
                     str_ = ''
                     for i in temp_nodes:
-                        str_ += i
+                        str_ += i.char
                     print 'index=8: ', p == None, str_
                 if node == None and p != None: # p != None表示p不为根节点，此时的None表示根节点
                     p = p.fail_point
@@ -190,8 +193,8 @@ class DictTree(object):
 
     def printInfo(self):
         for root in self.roots:
-            # root.printInfo()
-            print 'root.char:', root.char
+            root.printInfo()
+            # print 'root.char:', root.char
     
     # def roughMatch(self, str)
 
