@@ -38,7 +38,7 @@ class TreeNode(object):
         if self.fail_point:
             char = self.fail_point.char
             id = self.fail_point.id
-        str_
+        str_ = ''
         for char in self.candidates:
             str_ += char
         print "char:", self.char, \
