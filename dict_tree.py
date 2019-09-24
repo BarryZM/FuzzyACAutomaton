@@ -116,7 +116,8 @@ class DictTree(object):
             if p:
                 temp = copy.copy(p)  
                 while temp != None:
-                    print "index:", index, "   match:", temp.chars
+                    if temp.is_leaf:
+                        print "index:", index, "   match:", temp.chars
                     temp = temp.fail_point
 
     def printInfo(self):
