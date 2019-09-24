@@ -129,8 +129,8 @@ class DictTree(object):
                     p = p.fail_point
                     if p == None:
                         temp_nodes = self.roots
-                        break
-                    temp_nodes = p.childs  # 需要判断p不为None
+                    else:
+                        temp_nodes = p.childs  # 需要判断p不为None
                 else:
                     break
             if node != None:
@@ -165,8 +165,9 @@ class DictTree(object):
                 if node_list == [] and p != None: # p != None表示p不为根节点，此时的None表示根节点
                     p = p.fail_point
                     if p == None:
-                        break
-                    temp_nodes = p.childs  # 需要判断p不为None
+                        temp_nodes = self.roots
+                    else:
+                        temp_nodes = p.childs  # 需要判断p不为None
                 else:
                     break
             if node_list != []:
