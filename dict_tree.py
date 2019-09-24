@@ -187,7 +187,8 @@ class DictTree(object):
 
     def printInfo(self):
         for root in self.roots:
-            root.printInfo()
+            # root.printInfo()
+            print 'root.char:', root.char
     
     # def roughMatch(self, str)
 
