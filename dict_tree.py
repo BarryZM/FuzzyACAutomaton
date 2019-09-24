@@ -122,11 +122,6 @@ class DictTree(object):
             while True:
                 node = self.matchCharInNodes(temp_nodes, char)
                 print index, char.encode('utf-8'), node == None
-                # if index == 8:
-                #     str_ = ''
-                #     for i in temp_nodes:
-                #         str_ += i.char
-                #     print 'index=8: ', p == None, str_
                 if node == None and p != None: # p != None表示p不为根节点，此时的None表示根节点
                     p = p.fail_point
                     if p == None:
@@ -141,7 +136,7 @@ class DictTree(object):
             if p:
                 temp = copy.copy(p)  
                 while temp != None:
-                    if temp.is_leaf or True:
+                    if temp.is_leaf:
                         print "index:", index, "   match:", temp.chars
                     temp = temp.fail_point
 
@@ -217,20 +212,15 @@ class DictTree(object):
                     fail_points = new_fail_points 
                 else:
                     break
+            temp_str = ''
+            for i in temp_nodes:
+                temp_str += i.char
+            print index, char, temp_str
             if node_list != []:
                 for node in node_list:
                     self.askFailPoint(index, node)
             if len(fail_points) == 0:
                 nodes = [None]
-                # new_index = index + 1
-                # temp_node_list = []
-                # while new_index < len(sentence):
-                #     temp_char = sentence[new_index]
-                #     temp_node_list = self.allMatchCharInNodes(self.roots, temp_char)
-                #     if temp_node_list:
-                #         break
-                #     new_index += 1
-                # self.matchMulti(sentence, new_index, temp_node_list)
 
     def askFailPoint(self, index, node):
         temp = copy.copy(node) 
