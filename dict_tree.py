@@ -165,6 +165,7 @@ class DictTree(object):
                 self.matchMulti(sentence, index+1, node_list)
             if p == None:
                 new_index = index + 1
+                temp_node_list = []
                 while new_index < len(sentence):
                     temp_char = sentence[new_index]
                     temp_node_list = self.allMatchCharInNodes(self.roots, temp_char)
