@@ -218,7 +218,7 @@ class DictTree(object):
                 temp_str += i.char
             print index, char, temp_str
             if index <= 4:
-                print node_list != []
+                print 'node_list != []:', node_list != [], ' len(fail_points):', len(fail_points)
             if node_list != []:
                 for node in node_list:
                     self.askFailPoint(index, node)
