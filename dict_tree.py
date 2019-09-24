@@ -42,7 +42,7 @@ class TreeNode(object):
             "fail_point:", char, \
             "fail_point_id:", id, \
             "is_leaf:", self.is_leaf, \
-            "candidates:", [i.encode('utf-8') for i in self.candidates]
+            "candidates:", [i.decode('unicode_escape') for i in self.candidates]
         for child in  self.childs:
             child.printInfo()
     
