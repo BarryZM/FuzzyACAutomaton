@@ -191,6 +191,8 @@ class DictTree(object):
             for p in nodes:
                 if p == None:
                     temp_nodes += self.roots
+                    fail_points.add(None)
+                    fail_points_exist_none = True
                 else:
                     temp_nodes += p.childs
                     fail_points.add(p.fail_point)
