@@ -217,7 +217,7 @@ class DictTree(object):
             for i in temp_nodes:
                 temp_str += i.char
             print index, char, temp_str
-            if index == 3:
+            if index <= 4:
                 print node_list != []
             if node_list != []:
                 for node in node_list:
