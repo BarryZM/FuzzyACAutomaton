@@ -103,12 +103,16 @@ class DictTree(object):
             while True:
                 node = self.findCharInNodes(temp_nodes, char)
                 print index, char.encode('utf-8'), node == None
-                if not (node == None and p != None):
-                    break # p != None表示p不为根节点，此时的None表示根节点
-                p = p.fail_point
-                temp_nodes = p.childs  ############和上一行顺序有问题
+                if node == None and p != None:# p != None表示p不为根节点，此时的None表示根节点
+                    p = p.fail_point
+                    if p == None:
+                        break
+                    temp_nodes = p.childs  ############和上一行顺序有问题
+                else:
+                    break
             if node != None:
                 p = node
+                temp_nodes = p.childs
             if p:
                 temp = copy.copy(p)  
                 while temp != None:
