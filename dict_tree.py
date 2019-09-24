@@ -100,12 +100,13 @@ class DictTree(object):
         p = None
         temp_nodes = self.roots
         for index, char in enumerate(sentence):
-            node = self.findCharInNodes(temp_nodes, char)
-            print index, char.encode('utf-8'), node == None
-            while node == None and p != None: # p != None表示p不为根节点，此时的None表示根节点
-                p = p.fail_point
-                temp_nodes = p.childs
+            while True:
                 node = self.findCharInNodes(temp_nodes, char)
+                print index, char.encode('utf-8'), node == None
+                if not (node == None and p != None):
+                    break # p != None表示p不为根节点，此时的None表示根节点
+                p = p.fail_point
+                temp_nodes = p.childs  ############和上一行顺序有问题
             if node != None:
                 p = node
             if p:
