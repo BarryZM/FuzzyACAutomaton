@@ -27,7 +27,7 @@ class TreeNode(object):
             self.candidates += list(stroke_dict[char])
     
     def match(self,char):
-        if char in candidates:
+        if char in self.candidates:
             return True
         else:
             return False
