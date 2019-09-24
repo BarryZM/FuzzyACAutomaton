@@ -12,13 +12,13 @@ class TreeNode(object):
                 chars,
                 pinyin_dict,
                 stroke_dict):
-        self.char = char
-        self.chars = chars
-        self.candidates = [char]
-        self.childs = []
-        self.is_leaf = False
-        self.fail_point = None
-        self.id = id
+        self.char = char # 记录当前字符
+        self.chars = chars # 记录从根节点到当前字符的字符串
+        self.candidates = [char] # 记录相似集合
+        self.childs = [] # 孩子节点
+        self.is_leaf = False # 是否是叶子节点
+        self.fail_point = None  # fail_point
+        self.id = id # 按照构建顺序生成的id
         global id
         id += 1
         if char in pinyin_dict:
@@ -26,12 +26,14 @@ class TreeNode(object):
         if char in stroke_dict:
             self.candidates += list(stroke_dict[char])
     
+    # 用相似集合匹配字符char
     def match(self,char):
         if char in self.candidates:
             return True
         else:
             return False
     
+    # 打印节点信息：char、fail_point.char、fail_point.id、is_leaf、candidates
     def printInfo(self):
         char = None
         id = None
@@ -120,11 +122,11 @@ class DictTree(object):
             while True:
                 node = self.matchCharInNodes(temp_nodes, char)
                 print index, char.encode('utf-8'), node == None
-                if index == 8:
-                    str_ = ''
-                    for i in temp_nodes:
-                        str_ += i.char
-                    print 'index=8: ', p == None, str_
+                # if index == 8:
+                #     str_ = ''
+                #     for i in temp_nodes:
+                #         str_ += i.char
+                #     print 'index=8: ', p == None, str_
                 if node == None and p != None: # p != None表示p不为根节点，此时的None表示根节点
                     p = p.fail_point
                     if p == None:
@@ -184,7 +186,52 @@ class DictTree(object):
                         break
                     new_index += 1
                 self.matchMulti(sentence, new_index, temp_node_list)
- 
+
+    def matchMultiNew(self, sentence):
+        nodes = [None]
+        for index, char in enumerate(sentence):
+            temp_nodes = []
+            fail_points = set()
+            fail_points_exist_none = False
+            for p in nodes:
+                if p == None:
+                    temp_nodes += self.roots
+                else:
+                    temp_nodes += p.childs
+                    fail_points.add(p.fail_point)
+                    if p.fail_point == None:
+                        fail_points_exist_none = True
+            
+            while True:
+                node_list = self.allMatchCharInNodes(temp_nodes, char)
+                if node_list == [] and len(fail_points) != 0: # p != None表示p不为根节点，此时的None表示根节点
+                    temp_nodes = []
+                    new_fail_points = set()
+                    for fail_point in fail_points:
+                        if fail_point == None and (not fail_points_exist_none):
+                            temp_nodes += self.roots
+                            fail_points_exist_none = True
+                        else:
+                            temp_nodes += fail_point.childs
+                            new_fail_points.add(fail_point.fail_point)
+                    fail_points = new_fail_points 
+                else:
+                    break
+            if node_list != []:
+                for node in node_list:
+                    self.askFailPoint(index, node)
+            if len(fail_points) == 0:
+                nodes = [None]
+                # new_index = index + 1
+                # temp_node_list = []
+                # while new_index < len(sentence):
+                #     temp_char = sentence[new_index]
+                #     temp_node_list = self.allMatchCharInNodes(self.roots, temp_char)
+                #     if temp_node_list:
+                #         break
+                #     new_index += 1
+                # self.matchMulti(sentence, new_index, temp_node_list)
+
     def askFailPoint(self, index, node):
         temp = copy.copy(node) 
         while temp != None:
@@ -208,6 +255,7 @@ if __name__ == "__main__":
     subject_noun = load_subject_noun(subject_path)
     dict_tree = DictTree(pinyin_dict, stroke_dict, subject_noun)
     dict_tree.printInfo()
-    dict_tree.match(u'羊绵公闪详肉山公站立重配弹夹不足')
-    dict_tree.matchMultiState(u'羊绵公闪详肉山公站立重配弹夹不足')
+    # dict_tree.match(u'羊绵公闪详肉山公站立重配弹夹不足')
+    # dict_tree.matchMultiState(u'羊绵公闪详肉山公站立重配弹夹不足')
+    dict_tree.matchMultiNew(u'羊绵公闪详肉山公站立重配弹夹不足')
                 
