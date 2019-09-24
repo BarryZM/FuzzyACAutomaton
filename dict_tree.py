@@ -116,6 +116,8 @@ class DictTree(object):
             while True:
                 node = self.matchCharInNodes(temp_nodes, char)
                 print index, char.encode('utf-8'), node == None
+                if index == 8:
+                    print p == None, [i.chars for i in temp_nodes]
                 if node == None and p != None: # p != None表示p不为根节点，此时的None表示根节点
                     p = p.fail_point
                     if p == None:
