@@ -212,10 +212,13 @@ class DictTree(object):
                     fail_points = new_fail_points 
                 else:
                     break
+                    
             temp_str = ''
             for i in temp_nodes:
                 temp_str += i.char
             print index, char, temp_str
+            if index == 3:
+                print node_list != []
             if node_list != []:
                 for node in node_list:
                     self.askFailPoint(index, node)
