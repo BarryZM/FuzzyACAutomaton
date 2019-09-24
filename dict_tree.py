@@ -97,6 +97,7 @@ class DictTree(object):
         
     def buildDict(self):
         for temp_str in self.str_list:
+            print temp_str
             temp_nodes = self.roots
             for index, char in enumerate(temp_str):
                 node = self.findCharInNodes(temp_nodes, char)
@@ -121,7 +122,7 @@ class DictTree(object):
                 if node == None and p != None: # p != None表示p不为根节点，此时的None表示根节点
                     p = p.fail_point
                     if p == None:
-                        # temp_nodes = self.roots
+                        temp_nodes = self.roots
                         break
                     temp_nodes = p.childs  # 需要判断p不为None
                 else:
