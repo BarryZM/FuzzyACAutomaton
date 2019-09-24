@@ -196,5 +196,6 @@ if __name__ == "__main__":
     subject_noun = load_subject_noun(subject_path)
     dict_tree = DictTree(pinyin_dict, stroke_dict, subject_noun)
     dict_tree.printInfo()
-    dict_tree.match(u'羊绵公闪详肉山公')
+    dict_tree.match(u'羊绵公闪详肉山公站立重配弹夹不足')
+    dict_tree.matchMultiState(u'羊绵公闪详肉山公站立重配弹夹不足')
                 
