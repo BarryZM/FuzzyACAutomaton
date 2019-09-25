@@ -198,6 +198,10 @@ class DictTree(object):
                     fail_points.add(p.fail_point)
                     if p.fail_point == None:
                         fail_points_exist_none = True
+            if index == 3:
+                temp_str = ''
+                for i in temp_nodes:
+                    temp_str += i.char
             
             while True:
                 node_list = self.allMatchCharInNodes(temp_nodes, char)
