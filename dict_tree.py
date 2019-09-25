@@ -60,6 +60,7 @@ class DictTree(object):
         self.stroke_dict = stroke_dict
         self.str_list = str_list
         self.roots = []
+        self.match_res = []
         self.buildDict()
     
     def findCharInNodes(self, temp_nodes, char):
@@ -137,52 +138,54 @@ class DictTree(object):
                 temp = copy.copy(p)  
                 while temp != None:
                     if temp.is_leaf:
-                        print "index:", index, "   match:", temp.chars
+                        self.match_res.append([index, temp.chars])
+                        # print "index:", index, "   match:", temp.chars
                     temp = temp.fail_point
 
-    def matchMultiState(self, sentence):
-        new_index = 0
-        while new_index < len(sentence):
-            temp_char = sentence[new_index]
-            temp_node_list = self.allMatchCharInNodes(self.roots, temp_char)
-            new_index += 1
-            if temp_node_list:
-                break
-        self.matchMulti(sentence, new_index, temp_node_list)
+    # def matchMultiState(self, sentence):
+    #     new_index = 0
+    #     while new_index < len(sentence):
+    #         temp_char = sentence[new_index]
+    #         temp_node_list = self.allMatchCharInNodes(self.roots, temp_char)
+    #         new_index += 1
+    #         if temp_node_list:
+    #             break
+    #     self.matchMulti(sentence, new_index, temp_node_list)
 
-    def matchMulti(self, sentence, index, nodes):
-        if index >= len(sentence):
-            return 
-        char = sentence[index]
-        for p in nodes:
-            temp_nodes = p.childs
-            while True:
-                node_list = self.allMatchCharInNodes(temp_nodes, char)
-                # print index, char.encode('utf-8'), node == None
-                if node_list == [] and p != None: # p != None表示p不为根节点，此时的None表示根节点
-                    p = p.fail_point
-                    if p == None:
-                        temp_nodes = self.roots
-                    else:
-                        temp_nodes = p.childs  # 需要判断p不为None
-                else:
-                    break
-            if node_list != []:
-                for node in node_list:
-                    self.askFailPoint(index, node)
-                self.matchMulti(sentence, index+1, node_list)
-            if p == None:
-                new_index = index + 1
-                temp_node_list = []
-                while new_index < len(sentence):
-                    temp_char = sentence[new_index]
-                    temp_node_list = self.allMatchCharInNodes(self.roots, temp_char)
-                    if temp_node_list:
-                        break
-                    new_index += 1
-                self.matchMulti(sentence, new_index, temp_node_list)
+    # def matchMulti(self, sentence, index, nodes):
+    #     if index >= len(sentence):
+    #         return 
+    #     char = sentence[index]
+    #     for p in nodes:
+    #         temp_nodes = p.childs
+    #         while True:
+    #             node_list = self.allMatchCharInNodes(temp_nodes, char)
+    #             # print index, char.encode('utf-8'), node == None
+    #             if node_list == [] and p != None: # p != None表示p不为根节点，此时的None表示根节点
+    #                 p = p.fail_point
+    #                 if p == None:
+    #                     temp_nodes = self.roots
+    #                 else:
+    #                     temp_nodes = p.childs  # 需要判断p不为None
+    #             else:
+    #                 break
+    #         if node_list != []:
+    #             for node in node_list:
+    #                 self.askFailPoint(index, node)
+    #             self.matchMulti(sentence, index+1, node_list)
+    #         if p == None:
+    #             new_index = index + 1
+    #             temp_node_list = []
+    #             while new_index < len(sentence):
+    #                 temp_char = sentence[new_index]
+    #                 temp_node_list = self.allMatchCharInNodes(self.roots, temp_char)
+    #                 if temp_node_list:
+    #                     break
+    #                 new_index += 1
+    #             self.matchMulti(sentence, new_index, temp_node_list)
 
     def matchMultiNew(self, sentence):
+        self.match_res = []
         nodes = [None]
         for index, char in enumerate(sentence):
             temp_nodes = []
@@ -238,15 +241,16 @@ class DictTree(object):
         temp = copy.copy(node) 
         while temp != None:
             if temp.is_leaf:
-                print "index:", index, "   match:", temp.chars
+                self.match_res.append([index, temp.chars])
             temp = temp.fail_point
 
     def printInfo(self):
         for root in self.roots:
             root.printInfo()
-            # print 'root.char:', root.char
     
-    # def roughMatch(self, str)
+    def printMatchRes(self):
+        for res in self.match_res:
+            print "index:", res[0], "    match_str:", res[1]
 
 if __name__ == "__main__":
     same_pinyin_path = './data/same_pinyin.txt'
@@ -260,4 +264,5 @@ if __name__ == "__main__":
     # dict_tree.match(u'羊绵公闪详肉山公站立重配弹夹不足')
     # dict_tree.matchMultiState(u'羊绵公闪详肉山公站立重配弹夹不足')
     dict_tree.matchMultiNew(u'羊绵公闪详肉山公站立重配弹夹不足')
+    dict_tree.printMatchRes()
                 
