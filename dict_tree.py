@@ -35,16 +35,16 @@ class TreeNode(object):
     
     # 打印节点信息：char、fail_point.char、fail_point.id、is_leaf、candidates
     def printInfo(self):
-        char = None
+        fail_point_char = None
         id = None
         if self.fail_point:
-            char = self.fail_point.char
+            fail_point_char = self.fail_point.char
             id = self.fail_point.id
         str_ = ''
         for char in self.candidates:
             str_ += char
         print "char:", self.char, \
-            "fail_point:", char, \
+            "fail_point:", fail_point_char, \
             "fail_point_id:", id, \
             "is_leaf:", self.is_leaf, \
             "candidates:", str_
@@ -196,12 +196,13 @@ class DictTree(object):
                 else:
                     temp_nodes += p.childs
                     fail_points.add(p.fail_point)
-                    if p.fail_point == None:
-                        fail_points_exist_none = True
-            if index == 3:
+                    # if p.fail_point == None:
+                    #     fail_points_exist_none = True
+            if index:
                 temp_str = ''
                 for i in temp_nodes:
                     temp_str += i.char
+                # print 'temp_nodes char:', temp_str, '  fail_points_exist_none:', fail_points_exist_none, '   nodes len:', len(nodes), '   fail_points:', len(fail_points)
             
             while True:
                 node_list = self.allMatchCharInNodes(temp_nodes, char)
@@ -223,13 +224,14 @@ class DictTree(object):
             temp_str = ''
             for i in temp_nodes:
                 temp_str += i.char
-            print index, char, temp_str
-            if index <= 4:
-                print 'node_list != []:', node_list != [], ' len(fail_points):', len(fail_points)
+            # print index, char, temp_str
+            # if index == 8:
+            #     print 'node_list != []:', node_list != [], ' len(fail_points):', len(fail_points)
             if node_list != []:
                 for node in node_list:
                     self.askFailPoint(index, node)
-            if len(fail_points) == 0:
+                nodes = node_list
+            elif len(fail_points) == 0:
                 nodes = [None]
 
     def askFailPoint(self, index, node):
