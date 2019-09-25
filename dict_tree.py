@@ -232,16 +232,17 @@ class DictTree(object):
             #     print 'node_list != []:', node_list != [], ' len(fail_points):', len(fail_points)
             if node_list != []:
                 for node in node_list:
-                    self.askFailPoint(index, node)
+                    self.askFailPoint(index, node, sentence)
                 nodes = node_list
             elif len(fail_points) == 0:
                 nodes = [None]
 
-    def askFailPoint(self, index, node):
+    def askFailPoint(self, index, node, sentence):
         temp = copy.copy(node) 
         while temp != None:
             if temp.is_leaf:
-                self.match_res.append([index, temp.chars])
+                if sentence[index+1-len(temp.chars):index+1] != temp.chars:
+                    self.match_res.append([index, temp.chars])
             temp = temp.fail_point
 
     def printInfo(self):
@@ -264,5 +265,7 @@ if __name__ == "__main__":
     # dict_tree.match(u'羊绵公闪详肉山公站立重配弹夹不足')
     # dict_tree.matchMultiState(u'羊绵公闪详肉山公站立重配弹夹不足')
     dict_tree.matchMultiNew(u'羊绵公闪详肉山公站立重配弹夹不足')
+    dict_tree.printMatchRes()
+    dict_tree.matchMultiNew(u'羊绵公山羊肉山公站立重配弹夹不足')
     dict_tree.printMatchRes()
                 
