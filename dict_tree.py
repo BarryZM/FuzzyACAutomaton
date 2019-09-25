@@ -256,7 +256,7 @@ class DictTree(object):
 if __name__ == "__main__":
     same_pinyin_path = './data/same_pinyin.txt'
     same_stroke_path = './data/same_stroke.txt'
-    subject_path = './data/dict_tree_test_data1'
+    subject_path = './data/math_all' # './data/dict_tree_test_data1'
     pinyin_dict = load_same_pinyin(same_pinyin_path)
     stroke_dict = load_same_stroke(same_stroke_path)
     subject_noun = load_subject_noun(subject_path)
