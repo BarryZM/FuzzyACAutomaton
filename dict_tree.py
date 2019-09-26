@@ -265,6 +265,10 @@ def str_same_rate(str1, str2):
 
 def segment(origin_str_ext, left_length, new_str):
     seg_list = jieba.cut(origin_str_ext)
+    new_seg_list = []
+    for i in seg_list:
+        new_seg_list.append(i)
+    seg_list = new_seg_list
     count = 0
     split_count = 0
     gt_count = 0
@@ -275,10 +279,12 @@ def segment(origin_str_ext, left_length, new_str):
             if len(i) > 1 and index < len(seg_list)-1 and len(seg_list[index+1]) > 1:
                 gt_count += 1
     return split_count, gt_count
-def is_divisible(origin_str_ext, left_length, new_str)
-    split_count = segment(origin_str_ext, left_length, new_str)
+def is_divisible(origin_str_ext, left_length, new_str):
+    split_count, gt_count = segment(origin_str_ext, left_length, new_str)
     if split_count > 0 and gt_count > 0:
         return True
+    return False
+
 
 if __name__ == "__main__":
     same_pinyin_path = './data/same_pinyin.txt'
