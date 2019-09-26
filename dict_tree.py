@@ -304,6 +304,7 @@ if __name__ == "__main__":
     same_pinyin_path = './data/same_pinyin.txt'
     same_stroke_path = './data/same_stroke.txt'
     subject_path = './data/math_all' # './data/math_all' # './data/dict_tree_test_data1'
+    jieba.load_userdict(subject_path)
     pinyin_dict = load_same_pinyin(same_pinyin_path)
     stroke_dict = load_same_stroke(same_stroke_path)
     subject_noun = load_subject_noun(subject_path)
@@ -312,7 +313,7 @@ if __name__ == "__main__":
     print 'build finish'
     width = 5
     start_time = time.time()
-    with codecs.open('./data/wfh.test_shuf', 'r', encoding='utf-8') as f:
+    with codecs.open('./data/allMath_2.csv_678', 'r', encoding='utf-8') as f:
         for line in f:
             line = line.strip()
             # print line
