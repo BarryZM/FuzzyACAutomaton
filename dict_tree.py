@@ -285,6 +285,18 @@ def is_divisible(origin_str_ext, left_length, new_str):
         return True
     return False
 
+def split_words(origin_str_ext, left_length, new_str):
+    seg_list = jieba.cut(origin_str_ext)
+    ori_seg_list = []
+    for i in seg_list:
+        ori_seg_list.append(i)
+    for i in range(len(new_str)):
+        origin_str_ext[i+left_length] = new_str[i]
+    seg_list = jieba.cut(origin_str_ext)
+    new_seg_list = []
+    for i in seg_list:
+        new_seg_list.append(i)
+    return len(ori_seg_list) > len(new_seg_list)
 
 if __name__ == "__main__":
     same_pinyin_path = './data/same_pinyin.txt'
@@ -313,7 +325,7 @@ if __name__ == "__main__":
                         left_length = width
                         if start_index == 0:
                             left_length = res[0]+1-len(res[1])
-                        if not is_divisible(origin_str_ext, left_length, res[1]): # is_divisible可分割并且跟相邻的字符组成词组
+                        if not split_words(origin_str_ext, left_length, res[1]): # is_divisible可分割并且跟相邻的字符组成词组
                             print 'origin_str:', origin_str, '    match:', res[1]
                             mark = True
                 if mark:
