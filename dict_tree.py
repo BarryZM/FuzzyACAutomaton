@@ -298,7 +298,7 @@ def split_words(origin_str_ext, left_length, new_str):
     new_seg_list = []
     for i in seg_list:
         new_seg_list.append(i)
-    return len(ori_seg_list) > len(new_seg_list)
+    return len(ori_seg_list) >= len(new_seg_list)
 
 if __name__ == "__main__":
     same_pinyin_path = './data/same_pinyin.txt'
