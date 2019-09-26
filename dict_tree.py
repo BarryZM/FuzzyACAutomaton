@@ -273,21 +273,21 @@ if __name__ == "__main__":
     dict_tree.printInfo()
     print 'build finish'
     with codecs.open('./data/wfh.test1', 'r', encoding='utf-8') as f:
-	for line in f:
-	    line = line.strip()
- 	    # print line
-	    dict_tree.matchMultiNew(line)
-	    if len(dict_tree.match_res) > 0:
-            for res in dict_tree.match_res:
-                origin_str = line[res[0]+1-len(res[1]):res[0]+1]
-                same_rate = StrSameRate(origin_str, res[1])
-                mark = False
-                if same_rate >= 0.5 and origin_str not in subject_noun:
-                    print 'origin_str:', origin_str, '    match:', res[1]
-                    mark =True
-                if mark:
-                    print line
-            # dict_tree.printMatchRes(line)
+        for line in f:
+            line = line.strip()
+            # print line
+            dict_tree.matchMultiNew(line)
+            if len(dict_tree.match_res) > 0:
+                for res in dict_tree.match_res:
+                    origin_str = line[res[0]+1-len(res[1]):res[0]+1]
+                    same_rate = StrSameRate(origin_str, res[1])
+                    mark = False
+                    if same_rate >= 0.5 and origin_str not in subject_noun:
+                        print 'origin_str:', origin_str, '    match:', res[1]
+                        mark =True
+                    if mark:
+                        print line
+                # dict_tree.printMatchRes(line)
 
     # dict_tree.match(u'羊绵公闪详肉山公站立重配弹夹不足')
     # dict_tree.matchMultiState(u'羊绵公闪详肉山公站立重配弹夹不足')
