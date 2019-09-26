@@ -4,6 +4,7 @@ import os
 import numpy as np 
 import copy
 from utils.utils import *
+import jieba
 
 id = 0
 class TreeNode(object):
@@ -253,7 +254,7 @@ class DictTree(object):
         for res in self.match_res:
             print "index:", res[0], "     origin_str:", sentence[res[0]+1-len(res[1]):res[0]+1], "    match_str:", res[1]
 
-def StrSameRate(str1, str2):
+def str_same_rate(str1, str2):
     if len(str1) != len(str2):
         return -1
     count = 0
@@ -261,6 +262,23 @@ def StrSameRate(str1, str2):
         if str1[i] == str2[i]:
             count += 1
     return float(count)/len(str1)
+
+def segment(origin_str_ext, left_length, new_str):
+    seg_list = jieba.cut(origin_str_ext)
+    count = 0
+    split_count = 0
+    gt_count = 0
+    for index, i in enumerate(seg_list):
+        count += len(i)
+        if count > left_length and count <= left_length+len(new_str):
+            split_count += 1
+            if len(i) > 1 and index < len(seg_list)-1 and len(seg_list[index+1]) > 1:
+                gt_count += 1
+    return split_count, gt_count
+def is_divisible(origin_str_ext, left_length, new_str)
+    split_count = segment(origin_str_ext, left_length, new_str)
+    if split_count > 0 and gt_count > 0:
+        return True
 
 if __name__ == "__main__":
     same_pinyin_path = './data/same_pinyin.txt'
@@ -272,6 +290,7 @@ if __name__ == "__main__":
     dict_tree = DictTree(pinyin_dict, stroke_dict, subject_noun)
     dict_tree.printInfo()
     print 'build finish'
+    width = 5
     with codecs.open('./data/wfh.test1', 'r', encoding='utf-8') as f:
         for line in f:
             line = line.strip()
@@ -280,13 +299,19 @@ if __name__ == "__main__":
             if len(dict_tree.match_res) > 0:
                 for res in dict_tree.match_res:
                     origin_str = line[res[0]+1-len(res[1]):res[0]+1]
-                    same_rate = StrSameRate(origin_str, res[1])
+                    start_index = max(res[0]+1-len(res[1])-width, 0)
+                    origin_str_ext = line[start_index : res[0]+1+width]
+                    same_rate = str_same_rate(origin_str, res[1])
                     mark = False
                     if same_rate >= 0.5 and origin_str not in subject_noun:
-                        print 'origin_str:', origin_str, '    match:', res[1]
-                        mark =True
-                    if mark:
-                        print line
+                        left_length = width
+                        if start_index == 0:
+                            left_length = res[0]+1-len(res[1])
+                        if not is_divisible(origin_str_ext, left_length, res[1]): # is_divisible可分割并且跟相邻的字符组成词组
+                            print 'origin_str:', origin_str, '    match:', res[1]
+                            mark = True
+                if mark:
+                    print line
                 # dict_tree.printMatchRes(line)
 
     # dict_tree.match(u'羊绵公闪详肉山公站立重配弹夹不足')
