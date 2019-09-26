@@ -5,6 +5,7 @@ import numpy as np
 import copy
 from utils.utils import *
 import jieba
+import time
 
 id = 0
 class TreeNode(object):
@@ -310,7 +311,8 @@ if __name__ == "__main__":
     dict_tree.printInfo()
     print 'build finish'
     width = 5
-    with codecs.open('./data/wfh.test1', 'r', encoding='utf-8') as f:
+    start_time = time.time()
+    with codecs.open('./data/wfh.test_shuf', 'r', encoding='utf-8') as f:
         for line in f:
             line = line.strip()
             # print line
@@ -332,7 +334,8 @@ if __name__ == "__main__":
                 if mark:
                     print line
                 # dict_tree.printMatchRes(line)
-
+    end_time = time.time()
+    print end_time-start_time
     # dict_tree.match(u'羊绵公闪详肉山公站立重配弹夹不足')
     # dict_tree.matchMultiState(u'羊绵公闪详肉山公站立重配弹夹不足')
     # dict_tree.matchMultiNew(u'羊绵公闪详肉山公站立重配弹夹不足')
