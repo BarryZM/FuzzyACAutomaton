@@ -43,11 +43,11 @@ class TreeNode(object):
         str_ = ''
         for char in self.candidates:
             str_ += char
-        print "char:", self.char, \
-            "fail_point:", fail_point_char, \
-            "fail_point_id:", id, \
-            "is_leaf:", self.is_leaf, \
-            "candidates:", str_
+        # print "char:", self.char, \
+        #     "fail_point:", fail_point_char, \
+        #     "fail_point_id:", id, \
+        #     "is_leaf:", self.is_leaf, \
+        #     "candidates:", str_
         for child in  self.childs:
             child.printInfo()
     
@@ -103,7 +103,7 @@ class DictTree(object):
         
     def buildDict(self):
         for temp_str in self.str_list:
-            print temp_str
+            # print temp_str
             temp_nodes = self.roots
             for index, char in enumerate(temp_str):
                 node = self.findCharInNodes(temp_nodes, char)
@@ -122,7 +122,7 @@ class DictTree(object):
         for index, char in enumerate(sentence):
             while True:
                 node = self.matchCharInNodes(temp_nodes, char)
-                print index, char.encode('utf-8'), node == None
+                # print index, char.encode('utf-8'), node == None
                 if node == None and p != None: # p != None表示p不为根节点，此时的None表示根节点
                     p = p.fail_point
                     if p == None:
@@ -249,23 +249,33 @@ class DictTree(object):
         for root in self.roots:
             root.printInfo()
     
-    def printMatchRes(self):
+    def printMatchRes(self, sentence):
         for res in self.match_res:
-            print "index:", res[0], "    match_str:", res[1]
+            print "index:", res[0], "     origin_str:", sentence[res[0]+1-len(res[1]):res[0]+1], "    match_str:", res[1]
 
 if __name__ == "__main__":
     same_pinyin_path = './data/same_pinyin.txt'
     same_stroke_path = './data/same_stroke.txt'
-    subject_path = './data/math_all' # './data/dict_tree_test_data1'
+    subject_path = './data/math_all' # './data/math_all' # './data/dict_tree_test_data1'
     pinyin_dict = load_same_pinyin(same_pinyin_path)
     stroke_dict = load_same_stroke(same_stroke_path)
     subject_noun = load_subject_noun(subject_path)
     dict_tree = DictTree(pinyin_dict, stroke_dict, subject_noun)
     dict_tree.printInfo()
+    print 'build finish'
+    with codecs.open('./data/wfh.test1', 'r', encoding='utf-8') as f:
+	for line in f:
+	    line = line.strip()
+ 	    # print line
+	    dict_tree.matchMultiNew(line)
+	    if len(dict_tree.match_res) > 0:
+		print line
+            	dict_tree.printMatchRes(line)
+
     # dict_tree.match(u'羊绵公闪详肉山公站立重配弹夹不足')
     # dict_tree.matchMultiState(u'羊绵公闪详肉山公站立重配弹夹不足')
-    dict_tree.matchMultiNew(u'羊绵公闪详肉山公站立重配弹夹不足')
-    dict_tree.printMatchRes()
-    dict_tree.matchMultiNew(u'羊绵公山羊肉山公站立重配弹夹不足')
-    dict_tree.printMatchRes()
+    # dict_tree.matchMultiNew(u'羊绵公闪详肉山公站立重配弹夹不足')
+    # dict_tree.printMatchRes()
+    # dict_tree.matchMultiNew(u'羊绵公山羊肉山公站立重配弹夹不足')
+    # dict_tree.printMatchRes()
                 
