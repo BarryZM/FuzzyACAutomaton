@@ -253,6 +253,15 @@ class DictTree(object):
         for res in self.match_res:
             print "index:", res[0], "     origin_str:", sentence[res[0]+1-len(res[1]):res[0]+1], "    match_str:", res[1]
 
+def StrSameRate(str1, str2):
+    if len(str1) != len(str2):
+        return -1
+    count = 0
+    for i in range(len(str1)):
+        if str1[i] == str2[i]:
+            count += 1
+    return float(count)/len(str1)
+
 if __name__ == "__main__":
     same_pinyin_path = './data/same_pinyin.txt'
     same_stroke_path = './data/same_stroke.txt'
@@ -269,8 +278,16 @@ if __name__ == "__main__":
  	    # print line
 	    dict_tree.matchMultiNew(line)
 	    if len(dict_tree.match_res) > 0:
-		print line
-            	dict_tree.printMatchRes(line)
+            for res in dict_tree.match_res:
+                origin_str = line[res[0]+1-len(res[1]):res[0]+1]
+                same_rate = StrSameRate(origin_str, res[1])
+                mark = False
+                if same_rate >= 0.5 and origin_str not in subject_noun:
+                    print 'origin_str:', origin_str, '    match:', res[1]
+                    mark =True
+                if mark:
+                    print line
+            # dict_tree.printMatchRes(line)
 
     # dict_tree.match(u'羊绵公闪详肉山公站立重配弹夹不足')
     # dict_tree.matchMultiState(u'羊绵公闪详肉山公站立重配弹夹不足')
