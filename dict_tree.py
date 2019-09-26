@@ -290,9 +290,10 @@ def split_words(origin_str_ext, left_length, new_str):
     ori_seg_list = []
     for i in seg_list:
         ori_seg_list.append(i)
-    for i in range(len(new_str)):
-        origin_str_ext[i+left_length] = new_str[i]
-    seg_list = jieba.cut(origin_str_ext)
+    new_str_ext = origin_str_ext[:left_length]
+    new_str_ext += new_str
+    new_str_ext += origin_str_ext[left_length + len(new_str):]
+    seg_list = jieba.cut(new_str_ext)
     new_seg_list = []
     for i in seg_list:
         new_seg_list.append(i)
