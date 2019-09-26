@@ -45,7 +45,7 @@ def load_same_pinyin(path, sep='\t'):
                 key_char = parts[0]
                 same_pron_same_tone = set(list(parts[1]))
                 same_pron_diff_tone = set(list(parts[2]))
-                value = same_pron_same_tone.union(same_pron_diff_tone)
+                value = same_pron_same_tone # same_pron_same_tone.union(same_pron_diff_tone)
                 if len(key_char) > 1 or not value:
                     continue
                 result[key_char] = value
