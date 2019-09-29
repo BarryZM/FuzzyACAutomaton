@@ -10,10 +10,13 @@ import logging
 import logging.handlers
 from logging.handlers import TimedRotatingFileHandler
 from logging.handlers import RotatingFileHandler
-from utils import dict_tree
+from utils.dict_tree import *
+from utils.utils import *
 
 import numpy as np
 from flask import Flask, request, jsonify
+
+id = 0 # 字典树节点id
 
 def setup_logger(logger_name, log_file, level=logging.INFO):
     """
@@ -46,8 +49,9 @@ if __name__ == "__main__":
     config_path = './config/config_json.json' 
     with open(config_path, 'r') as f:
 	    config = json.load(f)
-    
+    print config['dict_tree']['same_pinyin_path']    
     math_logger, chemistry_logger = setup_all_logger()
+    print config['dict_tree']['same_pinyin_path']
     pinyin_dict = load_same_pinyin(config['dict_tree']['same_pinyin_path'])
     stroke_dict = load_same_stroke(config['dict_tree']['same_stroke_path'])
     math_noun = load_subject_noun(config['dict_tree']['math_dict'])
@@ -117,3 +121,13 @@ if __name__ == "__main__":
             return jsonify(output_data)
         else:
             return "Please use POST method."
+
+    # HTTP Errors handlers
+    @app.errorhandler(404)
+    def url_error(e):
+        return """Wrong URL!<pre>{}</pre>""".format(e), 404
+    @app.errorhandler(500)
+    def server_error(e):
+        return """ An internal error occurred: <pre>{}</pre> See logs for full stacktrace.""".format(e), 500
+    app.run(host=config['server']['host'], port=config['server']['port'], debug=False)
+

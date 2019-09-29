@@ -6,9 +6,9 @@
         "route_chemistry":"/predict/chemistry"
     },
     "dict_tree":{
-        "same_pinyin_path":"../data/same_pinyin.txt",
-        "same_stroke_path":"../data/same_stroke.txt",
-        "math_dict":"../data/math_all",
-        "chem_dict":"../data/chem"
+        "same_pinyin_path":"./data/same_pinyin.txt",
+        "same_stroke_path":"./data/same_stroke.txt",
+        "math_dict":"./data/math_all",
+        "chem_dict":"./data/chem"
     }
 }

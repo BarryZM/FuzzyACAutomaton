@@ -3,7 +3,7 @@ import sys
 import os
 import numpy as np 
 import copy
-from utils.utils import *
+from utils import *
 import jieba
 import time
 
@@ -219,7 +219,7 @@ class DictTreeModel(DictTree):
                 stroke_dict,
                 str_list,
                 sentence = ""):
-        super().__init__(pinyin_dict, stroke_dict, str_list)
+        super(DictTreeModel, self).__init__(pinyin_dict, stroke_dict, str_list)
         self.sentence = ""
 
     def matchMultiNew(self, sentence):
@@ -268,7 +268,7 @@ class DictTreeModel(DictTree):
                     left_length = res[0]+1-len(res[1])
                 if split_words(origin_str_ext, left_length, res[1]):
                     temp = {
-                        'index': res[0]
+                        'index': res[0],
                         'origin_str': origin_str, 
                         'match': res[1]
                     }
