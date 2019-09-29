@@ -144,48 +144,6 @@ class DictTree(object):
                         # print "index:", index, "   match:", temp.chars
                     temp = temp.fail_point
 
-    # def matchMultiState(self, sentence):
-    #     new_index = 0
-    #     while new_index < len(sentence):
-    #         temp_char = sentence[new_index]
-    #         temp_node_list = self.allMatchCharInNodes(self.roots, temp_char)
-    #         new_index += 1
-    #         if temp_node_list:
-    #             break
-    #     self.matchMulti(sentence, new_index, temp_node_list)
-
-    # def matchMulti(self, sentence, index, nodes):
-    #     if index >= len(sentence):
-    #         return 
-    #     char = sentence[index]
-    #     for p in nodes:
-    #         temp_nodes = p.childs
-    #         while True:
-    #             node_list = self.allMatchCharInNodes(temp_nodes, char)
-    #             # print index, char.encode('utf-8'), node == None
-    #             if node_list == [] and p != None: # p != None表示p不为根节点，此时的None表示根节点
-    #                 p = p.fail_point
-    #                 if p == None:
-    #                     temp_nodes = self.roots
-    #                 else:
-    #                     temp_nodes = p.childs  # 需要判断p不为None
-    #             else:
-    #                 break
-    #         if node_list != []:
-    #             for node in node_list:
-    #                 self.askFailPoint(index, node)
-    #             self.matchMulti(sentence, index+1, node_list)
-    #         if p == None:
-    #             new_index = index + 1
-    #             temp_node_list = []
-    #             while new_index < len(sentence):
-    #                 temp_char = sentence[new_index]
-    #                 temp_node_list = self.allMatchCharInNodes(self.roots, temp_char)
-    #                 if temp_node_list:
-    #                     break
-    #                 new_index += 1
-    #             self.matchMulti(sentence, new_index, temp_node_list)
-
     def matchMultiNew(self, sentence):
         self.match_res = []
         nodes = [None]
@@ -255,55 +213,82 @@ class DictTree(object):
         for res in self.match_res:
             print "index:", res[0], "     origin_str:", sentence[res[0]+1-len(res[1]):res[0]+1], "    match_str:", res[1]
 
-def str_same_rate(str1, str2):
-    if len(str1) != len(str2):
-        return -1
-    count = 0
-    for i in range(len(str1)):
-        if str1[i] == str2[i]:
-            count += 1
-    return float(count)/len(str1)
+class DictTreeModel(DictTree):
+    def __init__(self, 
+                pinyin_dict,
+                stroke_dict,
+                str_list,
+                sentence = ""):
+        super().__init__(pinyin_dict, stroke_dict, str_list)
+        self.sentence = ""
 
-def segment(origin_str_ext, left_length, new_str):
-    seg_list = jieba.cut(origin_str_ext)
-    new_seg_list = []
-    for i in seg_list:
-        new_seg_list.append(i)
-    seg_list = new_seg_list
-    count = 0
-    split_count = 0
-    gt_count = 0
-    for index, i in enumerate(seg_list):
-        count += len(i)
-        if count > left_length and count <= left_length+len(new_str):
-            split_count += 1
-            if len(i) > 1 and index < len(seg_list)-1 and len(seg_list[index+1]) > 1:
-                gt_count += 1
-    return split_count, gt_count
-def is_divisible(origin_str_ext, left_length, new_str):
-    split_count, gt_count = segment(origin_str_ext, left_length, new_str)
-    if split_count > 0 and gt_count > 0:
-        return True
-    return False
+    def matchMultiNew(self, sentence):
+        self.sentence = sentence
+        super().matchMultiNew(self.sentence)
 
-def split_words(origin_str_ext, left_length, new_str):
-    seg_list = jieba.cut(origin_str_ext)
-    ori_seg_list = []
-    for i in seg_list:
-        ori_seg_list.append(i)
-    new_str_ext = origin_str_ext[:left_length]
-    new_str_ext += new_str
-    new_str_ext += origin_str_ext[left_length + len(new_str):]
-    seg_list = jieba.cut(new_str_ext)
-    new_seg_list = []
-    for i in seg_list:
-        new_seg_list.append(i)
-    return len(ori_seg_list) >= len(new_seg_list)
+    def str_same_rate(self, str1, str2):
+        if len(str1) != len(str2):
+            return -1
+        count = 0
+        for i in range(len(str1)):
+            if str1[i] == str2[i]:
+                count += 1
+        return float(count)/len(str1)
+
+    def do_post(self, text):
+        input = {
+            'log_id': 1000,
+            'query': text,
+            'src': 'similar_v4',
+            'type': 4,
+            'dyn_flag': 129
+        }
+        response = post('192.168.33.111:8800/WordSegService/WordSeg', data=json.dumps(input))
+        phrase_words = response['phrase_words']
+        return phrase_words
+        
+    def split_words(self, origin_str_ext, left_length, new_str):
+        ori_seg_list = do_post(origin_str_ext)
+        new_str_ext = origin_str_ext[:left_length]
+        new_str_ext += new_str
+        new_str_ext += origin_str_ext[left_length + len(new_str):]
+        new_seg_list = do_post(new_str_ext)
+        return len(ori_seg_list) >= len(new_seg_list)
+
+    def get_res(self):
+        res = []
+        for res in self.match_res:
+            origin_str = self.sentence[res[0]+1-len(res[1]):res[0]+1]
+            start_index = max(res[0]+1-len(res[1])-width, 0)
+            origin_str_ext = self.sentence[start_index : res[0]+1+width]
+            same_rate = str_same_rate(origin_str, res[1])
+            if same_rate >= 0.5 and origin_str not in subject_noun:
+                left_length = width
+                if start_index == 0:
+                    left_length = res[0]+1-len(res[1])
+                if split_words(origin_str_ext, left_length, res[1]):
+                    temp = {
+                        'index': res[0]
+                        'origin_str': origin_str, 
+                        'match': res[1]
+                    }
+                    res.append(temp)
+        pre_index = 0
+        new_sentence = ""
+        for i in res:
+            new_sentence += self.sentence[pre_index, i['index']+1-len(i['match'])]
+            new_sentence += i['match']
+            pre_index = i['index'] + 1
+        return res, new_sentence
+
+
+
+
 
 if __name__ == "__main__":
     same_pinyin_path = './data/same_pinyin.txt'
     same_stroke_path = './data/same_stroke.txt'
-    subject_path = './data/chem' # './data/math_all' # './data/dict_tree_test_data1'
+    subject_path = './data/math_all' # './data/math_all' # './data/dict_tree_test_data1'
     jieba.load_userdict(subject_path)
     pinyin_dict = load_same_pinyin(same_pinyin_path)
     stroke_dict = load_same_stroke(same_stroke_path)
@@ -313,7 +298,7 @@ if __name__ == "__main__":
     print 'build finish'
     width = 5
     start_time = time.time()
-    with codecs.open('./data/allChemistry_2.csv_678_shuf1000', 'r', encoding='utf-8') as f:
+    with codecs.open('./data/allMath_2.csv_678', 'r', encoding='utf-8') as f:
         for line in f:
             line = line.strip()
             # print line
