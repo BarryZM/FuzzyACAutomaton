@@ -73,6 +73,8 @@ if __name__ == "__main__":
         if request.method == 'POST':
             start = time.time()
             input_data = request.json
+            print '*****************************************************'
+            print 'input_data:', input_data
             log_info = [str(input_data["tid"]), json.dumps(input_data)]
             output_data = {
                 "match_list": [],

@@ -4,8 +4,10 @@ import os
 import numpy as np 
 import copy
 from utils import *
+import json
 import jieba
 import time
+from requests import post
 
 id = 0
 class TreeNode(object):
@@ -224,7 +226,7 @@ class DictTreeModel(DictTree):
 
     def matchMultiNew(self, sentence):
         self.sentence = sentence
-        super().matchMultiNew(self.sentence)
+        super(DictTreeModel, self).matchMultiNew(self.sentence)
 
     def str_same_rate(self, str1, str2):
         if len(str1) != len(str2):
@@ -243,43 +245,54 @@ class DictTreeModel(DictTree):
             'type': 4,
             'dyn_flag': 129
         }
-        response = post('192.168.33.111:8800/WordSegService/WordSeg', data=json.dumps(input))
-        phrase_words = response['phrase_words']
+        print input
+        response = post('http://192.168.33.111:8800/WordSegService/WordSeg', data=json.dumps(input))
+        response.raise_for_status()
+        res = json.loads(response.content)
+        phrase_words = res['phrase_words']
+        print phrase_words
         return phrase_words
         
     def split_words(self, origin_str_ext, left_length, new_str):
-        ori_seg_list = do_post(origin_str_ext)
+        ori_seg_list = self.do_post(origin_str_ext)
+        print "len ori_seg_list:", len(ori_seg_list)       
         new_str_ext = origin_str_ext[:left_length]
         new_str_ext += new_str
         new_str_ext += origin_str_ext[left_length + len(new_str):]
-        new_seg_list = do_post(new_str_ext)
+        new_seg_list = self.do_post(new_str_ext)
+        print "len new_seg_list:", len(new_seg_list)
+        print len(ori_seg_list) >= len(new_seg_list)
         return len(ori_seg_list) >= len(new_seg_list)
 
     def get_res(self):
-        res = []
+        all_res = []
+        width = 5
         for res in self.match_res:
             origin_str = self.sentence[res[0]+1-len(res[1]):res[0]+1]
             start_index = max(res[0]+1-len(res[1])-width, 0)
             origin_str_ext = self.sentence[start_index : res[0]+1+width]
-            same_rate = str_same_rate(origin_str, res[1])
-            if same_rate >= 0.5 and origin_str not in subject_noun:
+            same_rate = self.str_same_rate(origin_str, res[1])
+            if same_rate >= 0.5 and origin_str not in self.str_list:
                 left_length = width
                 if start_index == 0:
                     left_length = res[0]+1-len(res[1])
-                if split_words(origin_str_ext, left_length, res[1]):
+                if self.split_words(origin_str_ext, left_length, res[1]):
                     temp = {
                         'index': res[0],
                         'origin_str': origin_str, 
                         'match': res[1]
                     }
-                    res.append(temp)
+                    all_res.append(temp)
         pre_index = 0
         new_sentence = ""
-        for i in res:
+        print all_res
+        for i in all_res:
+            print type(i)
             new_sentence += self.sentence[pre_index, i['index']+1-len(i['match'])]
             new_sentence += i['match']
             pre_index = i['index'] + 1
-        return res, new_sentence
+        print new_sentence
+        return all_res, new_sentence
 
 
 
