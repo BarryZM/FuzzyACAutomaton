@@ -245,7 +245,7 @@ class DictTreeModel(DictTree):
             'type': 4,
             'dyn_flag': 129
         }
-        print input
+        # print input
         response = post('http://192.168.33.111:8800/WordSegService/WordSeg', data=json.dumps(input))
         response.raise_for_status()
         res = json.loads(response.content)
@@ -288,7 +288,8 @@ class DictTreeModel(DictTree):
         # print all_res
         for i in all_res:
             print type(i)
-            new_sentence += self.sentence[pre_index, i['index']+1-len(i['match'])]
+            print 'pre_index:', pre_index, "        i['index']+1-len(i['match']):", i['index']+1-len(i['match'])
+            new_sentence += self.sentence[pre_index:i['index']+1-len(i['match'])]
             new_sentence += i['match']
             pre_index = i['index'] + 1
         if all_res == []:
@@ -313,7 +314,7 @@ if __name__ == "__main__":
     print 'build finish'
     width = 5
     start_time = time.time()
-    with codecs.open('./data/allMath_2.csv_678', 'r', encoding='utf-8') as f:
+    with codecs.open('../data/allMath_2.csv_678', 'r', encoding='utf-8') as f:
         for line in f:
             line = line.strip()
             # print line
