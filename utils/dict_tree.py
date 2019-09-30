@@ -287,8 +287,8 @@ class DictTreeModel(DictTree):
         new_sentence = ""
         # print all_res
         for i in all_res:
-            print type(i)
-            print 'pre_index:', pre_index, "        i['index']+1-len(i['match']):", i['index']+1-len(i['match'])
+            # print type(i)
+            # print 'pre_index:', pre_index, "        i['index']+1-len(i['match']):", i['index']+1-len(i['match'])
             new_sentence += self.sentence[pre_index:i['index']+1-len(i['match'])]
             new_sentence += i['match']
             pre_index = i['index'] + 1
