@@ -318,8 +318,13 @@ if __name__ == "__main__":
         for line in f:
             line = line.strip()
             # print line
+            start = time.time()
             dict_tree.matchMultiNew(line)
+            end = time.time()
+            print "matchMultiNew time:", end - start
             ress, sentence = dict_tree.getRes()
+            new_end = time.time()
+            print "getRes time:", new_end - end
             if ress:
                 for res in ress:
                     print 'origin_str:', res['origin_str'],  '    match:', res['match']
