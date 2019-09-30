@@ -111,8 +111,13 @@ if __name__ == "__main__":
                 "tid": input_data["tid"]
             }
             text = input_data['text']
+            start = time.time()
             dict_tree.matchMultiNew(text)
+            end = time.time()
+            print "matchMultiNew time:", end - start
             match_pairs, new_text = dict_tree.getRes()
+            new_end = time.time()
+            print "getRes time:", new_end - end
             output_data["match_list"] = match_pairs
             output_data["text"] = new_text
             log_info.append(json.dumps(match_pairs))
