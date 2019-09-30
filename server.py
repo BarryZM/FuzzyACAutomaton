@@ -84,7 +84,7 @@ if __name__ == "__main__":
             }
             text = input_data['text']
             dict_tree.matchMultiNew(text)
-            match_pairs, new_text = dict_tree.get_res()
+            match_pairs, new_text = dict_tree.getRes()
             output_data["match_list"] = match_pairs
             output_data["text"] = new_text
             log_info.append(json.dumps(match_pairs))
@@ -112,7 +112,7 @@ if __name__ == "__main__":
             }
             text = input_data['text']
             dict_tree.matchMultiNew(text)
-            match_pairs, new_text = dict_tree.get_res()
+            match_pairs, new_text = dict_tree.getRes()
             output_data["match_list"] = match_pairs
             output_data["text"] = new_text
             log_info.append(json.dumps(match_pairs))

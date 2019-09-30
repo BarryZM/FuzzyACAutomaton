@@ -228,7 +228,7 @@ class DictTreeModel(DictTree):
         self.sentence = sentence
         super(DictTreeModel, self).matchMultiNew(self.sentence)
 
-    def str_same_rate(self, str1, str2):
+    def strSameRate(self, str1, str2):
         if len(str1) != len(str2):
             return -1
         count = 0
@@ -237,7 +237,7 @@ class DictTreeModel(DictTree):
                 count += 1
         return float(count)/len(str1)
 
-    def do_post(self, text):
+    def doPost(self, text):
         input = {
             'log_id': 1000,
             'query': text,
@@ -250,33 +250,33 @@ class DictTreeModel(DictTree):
         response.raise_for_status()
         res = json.loads(response.content)
         phrase_words = res['phrase_words']
-        print phrase_words
+        # print phrase_words
         return phrase_words
         
-    def split_words(self, origin_str_ext, left_length, new_str):
-        ori_seg_list = self.do_post(origin_str_ext)
-        print "len ori_seg_list:", len(ori_seg_list)       
+    def splitWords(self, origin_str_ext, left_length, new_str):
+        ori_seg_list = self.doPost(origin_str_ext)
+        # print "len ori_seg_list:", len(ori_seg_list)       
         new_str_ext = origin_str_ext[:left_length]
         new_str_ext += new_str
         new_str_ext += origin_str_ext[left_length + len(new_str):]
-        new_seg_list = self.do_post(new_str_ext)
-        print "len new_seg_list:", len(new_seg_list)
-        print len(ori_seg_list) >= len(new_seg_list)
+        new_seg_list = self.doPost(new_str_ext)
+        # print "len new_seg_list:", len(new_seg_list)
+        # print len(ori_seg_list) >= len(new_seg_list)
         return len(ori_seg_list) >= len(new_seg_list)
 
-    def get_res(self):
+    def getRes(self):
         all_res = []
         width = 5
         for res in self.match_res:
             origin_str = self.sentence[res[0]+1-len(res[1]):res[0]+1]
             start_index = max(res[0]+1-len(res[1])-width, 0)
             origin_str_ext = self.sentence[start_index : res[0]+1+width]
-            same_rate = self.str_same_rate(origin_str, res[1])
+            same_rate = self.strSameRate(origin_str, res[1])
             if same_rate >= 0.5 and origin_str not in self.str_list:
                 left_length = width
                 if start_index == 0:
                     left_length = res[0]+1-len(res[1])
-                if self.split_words(origin_str_ext, left_length, res[1]):
+                if self.splitWords(origin_str_ext, left_length, res[1]):
                     temp = {
                         'index': res[0],
                         'origin_str': origin_str, 
@@ -285,13 +285,15 @@ class DictTreeModel(DictTree):
                     all_res.append(temp)
         pre_index = 0
         new_sentence = ""
-        print all_res
+        # print all_res
         for i in all_res:
             print type(i)
             new_sentence += self.sentence[pre_index, i['index']+1-len(i['match'])]
             new_sentence += i['match']
             pre_index = i['index'] + 1
-        print new_sentence
+        if all_res == []:
+            new_sentence = self.sentence
+        # print new_sentence
         return all_res, new_sentence
 
 
