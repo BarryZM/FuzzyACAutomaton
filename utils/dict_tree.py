@@ -301,14 +301,14 @@ class DictTreeModel(DictTree):
 
 
 if __name__ == "__main__":
-    same_pinyin_path = './data/same_pinyin.txt'
-    same_stroke_path = './data/same_stroke.txt'
-    subject_path = './data/math_all' # './data/math_all' # './data/dict_tree_test_data1'
+    same_pinyin_path = '../data/same_pinyin.txt'
+    same_stroke_path = '../data/same_stroke.txt'
+    subject_path = '../data/math_all' # './data/math_all' # './data/dict_tree_test_data1'
     jieba.load_userdict(subject_path)
     pinyin_dict = load_same_pinyin(same_pinyin_path)
     stroke_dict = load_same_stroke(same_stroke_path)
     subject_noun = load_subject_noun(subject_path)
-    dict_tree = DictTree(pinyin_dict, stroke_dict, subject_noun)
+    dict_tree = DictTreeModel(pinyin_dict, stroke_dict, subject_noun)
     dict_tree.printInfo()
     print 'build finish'
     width = 5
@@ -318,23 +318,11 @@ if __name__ == "__main__":
             line = line.strip()
             # print line
             dict_tree.matchMultiNew(line)
-            if len(dict_tree.match_res) > 0:
-                for res in dict_tree.match_res:
-                    origin_str = line[res[0]+1-len(res[1]):res[0]+1]
-                    start_index = max(res[0]+1-len(res[1])-width, 0)
-                    origin_str_ext = line[start_index : res[0]+1+width]
-                    same_rate = str_same_rate(origin_str, res[1])
-                    mark = False
-                    if same_rate >= 0.5 and origin_str not in subject_noun:
-                        left_length = width
-                        if start_index == 0:
-                            left_length = res[0]+1-len(res[1])
-                        if split_words(origin_str_ext, left_length, res[1]): # is_divisible可分割并且跟相邻的字符组成词组
-                            print 'origin_str:', origin_str, '    match:', res[1]
-                            mark = True
-                if mark:
-                    print line
-                # dict_tree.printMatchRes(line)
+            ress, sentence = dict_tree.getRes()
+            if ress:
+                for res in ress:
+                    print 'origin_str:', res['origin_str'],  '    match:', res['match']
+                print line
     end_time = time.time()
     print end_time-start_time
     # dict_tree.match(u'羊绵公闪详肉山公站立重配弹夹不足')
