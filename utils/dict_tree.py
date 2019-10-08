@@ -246,7 +246,7 @@ class DictTreeModel(DictTree):
             'dyn_flag': 129
         }
         # print input
-        response = post('http://192.168.33.111:8800/WordSegService/WordSeg', data=json.dumps(input))
+        response = post('http://1.1.1.1:8800/WordSegService/WordSeg', data=json.dumps(input))
         response.raise_for_status()
         res = json.loads(response.content)
         phrase_words = res['phrase_words']

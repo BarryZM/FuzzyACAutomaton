@@ -1,6 +1,6 @@
 {
     "server":{
-        "host":"192.168.12.94",
+        "host":"1.1.1.1",
         "port":8200,
         "route_math":"/predict/math",
         "route_chemistry":"/predict/chemistry"
